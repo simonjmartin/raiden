@@ -17,7 +17,7 @@ the value to replace.
 
 the value with which to replace it.
 #>
-function Replace([string]$path, [string]$val, [string]$repl){
+function Replace($path, $val, $repl){
     (Get-Content $path) | ForEach-Object {$_ -replace $val, $repl} | set-content $path
 }
 
@@ -38,7 +38,7 @@ The current name of the project.
 
 The new name of the project.
 #>
-function UpdateProject([string]$projectPathFragment, [string]$oldProjectName, [string]$newProjectName){
+function UpdateProject($projectPathFragment, $oldProjectName, $newProjectName){
     Set-Content -Path ".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Properties\AssemblyInfo.cs" -Replace "ExampleProject", $newProjectName
     Set-Content -Path ".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Class1.cs" -Replace "ExampleProject", $newProjectName
     Rename-Item -Path ".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\" + $oldProjectName + ".csproj" -NewName ($newProjectName + ".csproj")
@@ -67,8 +67,8 @@ Rename-Item -Path ".\ThirdParty\FxCop\ExampleProject.fxcop" -NewName ($projectNa
 Rename-Item -Path ".\Product\ExampleProject.sln" -NewName ($projectName + ".sln")
 
 # Replace all instances of the ExampleProject placeholder in the solution
-Replace(".\Product\Production\ExampleProject\ExampleProject.csproj", "ExampleProject", $projectName)
+Replace -path ".\Product\Production\ExampleProject\ExampleProject.csproj" -val "ExampleProject" -repl $projectName
 
 
-UpdateProject("Production", "ExampleProject", $projectName)
-UpdateProject("Tests", "ExampleProject.Tests", $projectName + ".Tests")
+UpdateProject -projectFragmentPath "Production" -oldProjectName "ExampleProject" -newProjectName $projectName
+UpdateProject -projectPathFragment "Tests" -oldProjectName "ExampleProject.Tests" -newProjectName ($projectName + ".Tests")
