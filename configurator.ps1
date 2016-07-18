@@ -76,10 +76,10 @@ Rename-Item -Path ".\Product\ExampleProject.sln" -NewName ($projectName + ".sln"
 Rename-Item -Path ".\ReadMe.md" -NewName "Structure.md"
 
 # Create new project readme.
-$wikiLink = if ($wikiPage -ne $null) { "[" + $wikiPage + "](" + $wikiPage + ")" } else { "" } 
+$wikiLink = if ($wikiPage) { "[" + $wikiPage + "](" + $wikiPage + ")" } else { "" } 
 "# " + $projectName + "`r`n`r`n" + $description + "`r`n`r`n" + $wikiLink | Out-File ".\ReadMe.md"
 
-if ($gitOrigin -ne $null)
+if ($gitOrigin)
 {
     git remote rm origin
     git remote add origin $gitOrigin
