@@ -41,7 +41,6 @@ The new name of the project.
 function UpdateProject($projectPathFragment, $oldProjectName, $newProjectName){
     Replace -path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Properties\AssemblyInfo.cs") -val "ExampleProject" -repl $newProjectName
     Replace -path  (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Class1.cs") -val "ExampleProject" -repl $newProjectName
-    Replace -path  (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\" + $oldProjectName + ".csproj") -val "ExampleProject" -repl $newProjectName
     Rename-Item -Path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\" + $oldProjectName + ".csproj") -NewName ($newProjectName + ".csproj")
     Rename-Item -Path (".\Product\" + $projectPathFragment + "\" + $oldProjectName) -NewName $newProjectName
 }
@@ -62,14 +61,13 @@ Write-Host "Thank you.  Configuring..."
 
 cd $PSScriptRoot
 
+# Replace all instances of the ExampleProject placeholder in the solution
+Replace -path ".\Product\ExampleProject.sln" -val "ExampleProject" -repl $projectName
+
 # Rename some one-off files
 Rename-Item -Path ".\ThirdParty\Documents\ExampleProject.dgml" -NewName ($projectName + ".dgml")
 Rename-Item -Path ".\ThirdParty\FxCop\ExampleProject.fxcop" -NewName ($projectName + ".fxcop")
 Rename-Item -Path ".\Product\ExampleProject.sln" -NewName ($projectName + ".sln")
-
-# Replace all instances of the ExampleProject placeholder in the solution
-Replace -path ".\Product\Production\ExampleProject\ExampleProject.csproj" -val "ExampleProject" -repl $projectName
-
 
 UpdateProject -projectPathFragment "Production" -oldProjectName "ExampleProject" -newProjectName $projectName
 UpdateProject -projectPathFragment "Tests" -oldProjectName "ExampleProject.Tests" -newProjectName ($projectName + ".Tests")
