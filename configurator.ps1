@@ -73,6 +73,17 @@ Replace -path ".\Product\ExampleProject.sln" -val "ExampleProject" -repl $projec
 Rename-Item -Path ".\ThirdParty\Documents\ExampleProject.dgml" -NewName ($projectName + ".dgml")
 Rename-Item -Path ".\ThirdParty\FxCop\ExampleProject.fxcop" -NewName ($projectName + ".fxcop")
 Rename-Item -Path ".\Product\ExampleProject.sln" -NewName ($projectName + ".sln")
+Rename-Item -Path ".\ReadMe.md" -NewName "Structure.md"
+
+# Create new project readme.
+"# " + $projectName + "\n\n" + $description + "\n\n" + (if ($wikiPage -ne $null) { "[" + $wikiPage + "](" + $wikiPage + ")" }) | Out-File ".\ReadMe.md"
+
+if ($gitOrigin -ne $null)
+{
+    git remote add origin $gitOrigin
+    git remote rm origin
+    Write-Host ("origin is now set to track " + $gitOrigin)
+}
 
 UpdateProject -projectPathFragment "Production" -oldProjectName "ExampleProject" -newProjectName $projectName
 UpdateProject -projectPathFragment "Tests" -oldProjectName "ExampleProject.Tests" -newProjectName ($projectName + ".Tests")
