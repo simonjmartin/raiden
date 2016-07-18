@@ -42,7 +42,9 @@ function UpdateProject($projectPathFragment, $oldProjectName, $newProjectName){
     Replace -path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Properties\AssemblyInfo.cs") -val "ExampleProject" -repl $newProjectName
     Replace -path  (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Class1.cs") -val "ExampleProject" -repl $newProjectName
     Rename-Item -Path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\" + $oldProjectName + ".csproj") -NewName ($newProjectName + ".csproj")
-    
+    Replace -path  (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\" + $oldProjectName + ".csproj") -val "ExampleProject" -repl $projectName
+
+
     if (Test-Path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\" + $oldProjectName + ".snk")){
         Rename-Item -Path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\" + $oldProjectName + ".snk") -NewName ($newProjectName + "snk")
     }
