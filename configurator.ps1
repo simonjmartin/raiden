@@ -39,8 +39,8 @@ The current name of the project.
 The new name of the project.
 #>
 function UpdateProject($projectPathFragment, $oldProjectName, $newProjectName){
-    Set-Content -Path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Properties\AssemblyInfo.cs") -Replace "ExampleProject", $newProjectName
-    Set-Content -Path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Class1.cs") -Replace "ExampleProject", $newProjectName
+    Replace -path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Properties\AssemblyInfo.cs") -val "ExampleProject" -repl $newProjectName
+    Replace -path  (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Class1.cs") -val "ExampleProject" -repl $newProjectName
     Rename-Item -Path (".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\" + $oldProjectName + ".csproj") -NewName ($newProjectName + ".csproj")
     Rename-Item -Path (".\Product\" + $projectPathFragment + "\" + $oldProjectName) -NewName $newProjectName
 }
