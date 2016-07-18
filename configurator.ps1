@@ -76,7 +76,8 @@ Rename-Item -Path ".\Product\ExampleProject.sln" -NewName ($projectName + ".sln"
 Rename-Item -Path ".\ReadMe.md" -NewName "Structure.md"
 
 # Create new project readme.
-"# " + $projectName + "\n\n" + $description + "\n\n" + (if ($wikiPage -ne $null) { "[" + $wikiPage + "](" + $wikiPage + ")" }) | Out-File ".\ReadMe.md"
+$wikiLink = if ($wikiPage -ne $null) { "[" + $wikiPage + "](" + $wikiPage + ")" } else { "" } 
+"# " + $projectName + "\n\n" + $description + "\n\n" + $wikiLink | Out-File ".\ReadMe.md"
 
 if ($gitOrigin -ne $null)
 {
