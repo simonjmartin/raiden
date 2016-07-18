@@ -70,5 +70,5 @@ Rename-Item -Path ".\Product\ExampleProject.sln" -NewName ($projectName + ".sln"
 Replace -path ".\Product\Production\ExampleProject\ExampleProject.csproj" -val "ExampleProject" -repl $projectName
 
 
-UpdateProject -projectFragmentPath "Production" -oldProjectName "ExampleProject" -newProjectName $projectName
+UpdateProject -projectPathFragment "Production" -oldProjectName "ExampleProject" -newProjectName $projectName
 UpdateProject -projectPathFragment "Tests" -oldProjectName "ExampleProject.Tests" -newProjectName ($projectName + ".Tests")
