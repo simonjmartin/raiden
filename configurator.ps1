@@ -77,12 +77,12 @@ Rename-Item -Path ".\ReadMe.md" -NewName "Structure.md"
 
 # Create new project readme.
 $wikiLink = if ($wikiPage -ne $null) { "[" + $wikiPage + "](" + $wikiPage + ")" } else { "" } 
-"# " + $projectName + "\n\n" + $description + "\n\n" + $wikiLink | Out-File ".\ReadMe.md"
+"# " + $projectName + "`r`n`r`n" + $description + "`r`n`r`n" + $wikiLink | Out-File ".\ReadMe.md"
 
 if ($gitOrigin -ne $null)
 {
-    git remote add origin $gitOrigin
     git remote rm origin
+    git remote add origin $gitOrigin
     Write-Host ("origin is now set to track " + $gitOrigin)
 }
 
