@@ -1,9 +1,11 @@
+
+
 Solution structure
 
 Build
 	Files necessary to support building the project go in here.
 	XUnit execution configuration on the build server as also set here.
-	
+
 Product
 	Production
 		All the projects that make up the finished product go in here.
