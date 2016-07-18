@@ -1,4 +1,50 @@
 ﻿Clear-Host
+
+<#
+.SYNOPSIS
+
+Replace all instances of a string in a file with a different string.
+.DESCRIPTION
+
+Notes: http://superuser.com/questions/517760/how-to-search-and-replace-a-string-in-a-file-with-cmd-or-powershell
+.PARAMETER $path
+
+The file to search for replacements.
+.PARAMETER $val
+
+the value to replace.
+.PARAMETER $repl
+
+the value with which to replace it.
+#>
+function Replace([string]$path, [string]$val, [string]$repl){
+    (Get-Content $path) | ForEach-Object {$_ -replace $val, $repl} | set-content $path
+}
+
+
+<#
+.SYNOPSIS
+
+Updates the specified project with the new name.
+.DESCRIPTION
+
+.PARAMETER $projectPathFragment
+
+"Production" or "Tests".
+.PARAMETER $oldProjectName
+
+The current name of the project.
+.PARAMETER $newProjectName
+
+The new name of the project.
+#>
+function UpdateProject([string]$projectPathFragment, [string]$oldProjectName, [string]$newProjectName){
+    Set-Content -Path ".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Properties\AssemblyInfo.cs" -Replace "ExampleProject", $newProjectName
+    Set-Content -Path ".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\Class1.cs" -Replace "ExampleProject", $newProjectName
+    Rename-Item -Path ".\Product\" + $projectPathFragment + "\" + $oldProjectName + "\" + $oldProjectName + ".csproj" -NewName ($newProjectName + ".csproj")
+    Rename-Item -Path ".\Product\" + $projectPathFragment + "\" + $oldProjectName -NewName $newProjectName
+}
+
 Write-Host "CCCU New Solution Configurator"
 Write-Host "-----------------------------"
 $projectName = Read-Host -Prompt "What is the name of this solution? > "
@@ -15,18 +61,14 @@ Write-Host "Thank you.  Configuring..."
 
 cd $PSScriptRoot
 
+# Rename some one-off files
 Rename-Item -Path ".\ThirdParty\Documents\ExampleProject.dgml" -NewName ($projectName + ".dgml")
 Rename-Item -Path ".\ThirdParty\FxCop\ExampleProject.fxcop" -NewName ($projectName + ".fxcop")
 Rename-Item -Path ".\Product\ExampleProject.sln" -NewName ($projectName + ".sln")
 
-Set-Content -Path ".\Product\Production\ExampleProject\ExampleProject.csproj" -Replace "ExampleProject", $projectName
-Set-Content -Path ".\Product\Production\ExampleProject\Properties\AssemblyInfo.cs" -Replace "ExampleProject", $projectName
-Set-Content -Path ".\Product\Production\ExampleProject\Class1.cs" -Replace "ExampleProject", $projectName
-Rename-Item -Path ".\Product\Production\ExampleProject\ExampleProject.csproj" -NewName ($projectName + ".csproj")
-Rename-Item -Path ".\Product\Production\ExampleProject" -NewName $projectName
+# Replace all instances of the ExampleProject placeholder in the solution
+Replace(".\Product\Production\ExampleProject\ExampleProject.csproj", "ExampleProject", $projectName)
 
-Set-Content -Path ".\Product\Tests\ExampleProject.Tests\ExampleProject.csproj" -Replace "ExampleProject", $projectName
-Set-Content -Path ".\Product\Tests\ExampleProject.Tests\Properties\AssemblyInfo.cs" -Replace "ExampleProject", $projectName
-Set-Content -Path ".\Product\Tests\ExampleProject.Tests\Class1.cs" -Replace "ExampleProject", $projectName
-Rename-Item -Path ".\Product\Tests\ExampleProject.Tests\ExampleProject.csproj" -NewName ($projectName + ".Tests.csproj")
-Rename-Item -Path ".\Product\Tests\ExampleProject.Tests" -NewName ($projectName + ".Tests")
+
+UpdateProject("Production", "ExampleProject", $projectName)
+UpdateProject("Tests", "ExampleProject.Tests", $projectName + ".Tests")
