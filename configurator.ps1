@@ -52,6 +52,10 @@ function UpdateProject($projectPathFragment, $oldProjectName, $newProjectName){
 
 Write-Host "CCCU New Solution Configurator"
 Write-Host "-----------------------------"
+
+$branch = Read-Host -Prompt "Which branch do you want? master or SOA? > "
+git checkout $branch
+
 $projectName = Read-Host -Prompt "What is the name of this solution? > "
 if ($projectName.EndsWith(".sln"))
 {
