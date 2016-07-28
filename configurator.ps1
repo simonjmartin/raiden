@@ -54,7 +54,7 @@ Write-Host "CCCU New Solution Configurator"
 Write-Host "-----------------------------"
 
 $branch = Read-Host -Prompt "Which branch do you want? master or SOA? > "
-Write-Host git checkout $branch
+git checkout $branch -q
 
 $projectName = Read-Host -Prompt "What is the name of this solution? > "
 if ($projectName.EndsWith(".sln"))
